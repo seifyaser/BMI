@@ -1,17 +1,24 @@
 import 'package:bmi/BmiClassification.dart';
+import 'package:bmi/models/bmiRecord_model.dart';
 import 'package:flutter/material.dart';
+
+import 'package:hive/hive.dart';
 
 class Calculatebutton extends StatelessWidget {
   final double height;
   final int weight;
+  final Box<BMIRecordModel> box;
 
-  const Calculatebutton({super.key, required this.height, required this.weight});
+  const Calculatebutton({super.key, required this.height, required this.weight, required this.box});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
+      onPressed: () async {
         double bmi = weight / ((height / 100) * (height / 100));
+
+        // تخزين معلومات الـ BMI في Hive
+        box.add(BMIRecordModel(bmi: bmi, date: DateTime.now()));
 
         showModalBottomSheet(
           context: context,
@@ -63,3 +70,4 @@ class Calculatebutton extends StatelessWidget {
     );
   }
 }
+
